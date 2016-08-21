@@ -38,12 +38,12 @@ this line for additional variables you need graphs for.
 
 I.E.
 
-/status_graph %hp %hp_max
-/status_graph %sp %sp_max
+/status_graph hp hp_max
+/status_graph sp sp_max
 
 The default maximum variable %mdef is set at 100 for percentage based variables.
 
-/status_graph %gxp_perc %mdef
+/status_graph gxp_perc mdef
 
 At the end of your HPBAR trigger, or last HPBAR trigger if you have a multi-
 line HPBAR, add a /status_bar statement to display the values.  This uses
