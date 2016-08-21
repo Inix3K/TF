@@ -1,0 +1,96 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                                                           ;;
+;;                             STATUS BAR README                             ;;
+;;                                                                           ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+:: Purpose ::
+
+This will allow you to have graphical representation of numbers that stays on
+the status bar in TinyFugue.  The main one being your HPBAR, but any number
+can be represented this way.
+
+:: Implementation ::
+
+Update .tfrc
+------------
+
+Wherever you load your files at, which is normally near the top of your .tfrc
+
+/load status_bar.tf
+
+Whevever you setup your input field, i.e. near your "/set visual" statement
+
+/status_hp2
+
+
+Update HPBAR trigger
+--------------------
+
+This is to be added to your HPBAR trigger if already existing.  If you do not
+already have a HPBAR trigger, you will need to create one to capture all
+needed variables.
+
+/status_graph %var1 %var1_max
+
+The above command will generate the 10 character graph for var1.  Repeat
+this line for additional variables you need graphs for.
+
+I.E.
+
+/status_graph %hp %hp_max
+/status_graph %sp %sp_max
+
+The default maximum variable %mdef is set at 100 for percentage based variables.
+
+/status_graph %gxp_perc %mdef
+
+At the end of your HPBAR trigger, or last HPBAR trigger if you have a multi-
+line HPBAR, add a /status_bar statement to display the values.  This uses
+padding to keep the numbers lined up as you like.
+
+/set status_bar $[pad("Var1:",5,var1,3,"/",1,var1_max,-3)]
+
+Add as many statements as you need for your variables.  Keep in mind the width
+of your terminal.
+
+I.E.
+
+/set status_bar $[pad("HP:",3,hp,4,"/",1,hp_max,-4,"_SP:",4,sp,3,"/",1,sp_max,-3)]
+
+Note on pad:
+
+  pad(display_item,width,display_item_2,width_2)
+
+  A positive width is right justified, while a negative width is left justified.
+
+Next, add the following line for your graphical displays.  The /status_graph
+function stores the graph as %var1_graph, a 10 character field.
+
+/set status_bar2 $[pad("Var1:",5,var1_graph,10)]
+
+I.E.
+
+/set status_bar2 $[pad("H:",2,hp_graph,10,"_S:",3,sp_graph,10)].
+
+
+::  Notes ::
+
+Multiline Display
+-----------------
+This setup uses a 3 line status_bar display.  Line 1 keeps the default status
+bar in place, line 2 displays alphanumeric data, and line3 shows the graphical
+displays.
+
+You can view the /status_hp and /status_hp2 statements in status_bar.tf for
+examples of how you can move this around for fewer or more lines and customize
+to your liking.
+
+Statement Order
+---------------
+The /status_graph statements and the /set status_bar statement can be in any
+order, however some important order information to keep in mind:
+
+	*Variables must be set before any other status statements
+	*/status_graph statements must done before var_graphs are called,
+		as in the "/set status_bar2" statements in this readme
